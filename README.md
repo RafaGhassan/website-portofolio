@@ -173,6 +173,26 @@ Ada 2 file yang website ini referensikan tapi belum ada — Anda tinggal upload 
 
 ---
 
+## 💬 Mengganti Testimonials (PENTING — sebelum publish!)
+
+Section "Testimonials" di homepage sekarang berisi **placeholder copy** yang menggambarkan jenis feedback yang biasanya muncul. **Ini bukan testimonial asli** — Anda harus ganti semuanya sebelum website ini di-share ke publik.
+
+Buka `index.html`, cari komentar `<!-- [TESTIMONIAL 1 — REPLACE WITH REAL] -->`. Untuk setiap card, ganti:
+
+| Field | Diganti dengan |
+|---|---|
+| `<blockquote class="testimonial-quote">...` | Quote asli dari klien/kolega |
+| `<div class="testimonial-avatar">JK</div>` | 2 inisial nama mereka (contoh: "Andi Kusuma" → `AK`) |
+| `[Reviewer Name]` di `.testimonial-name` | Nama lengkap |
+| `[AI Quality Lead, Company]` di `.testimonial-role` | Jabatan, Perusahaan |
+
+**Cara menghapus 1 card:** hapus seluruh blok `<article class="testimonial-card">` sampai `</article>`.
+**Cara menambah card:** copy salah satu blok `<article>`, paste, lalu edit.
+
+**Tidak punya testimonial?** Hapus seluruh section `<section class="testimonials">...</section>`, lalu update eyebrow di section Contact dari "06" kembali ke "05".
+
+---
+
 ## 🖼️ Cara Generate OG Image (gambar share di LinkedIn / WhatsApp)
 
 Versi SVG sudah saya siapkan di `assets/og-image.svg`. Untuk kompatibilitas penuh dengan LinkedIn dan WhatsApp, perlu di-convert ke PNG:
