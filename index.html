@@ -13,7 +13,10 @@
      ============================================================ -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<!-- Async font load: render with fallback first, swap when fonts ready (no FOIT, no main-thread blocking) -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
 
 <style>
 /* ============================================================
@@ -55,7 +58,12 @@
    RESET & BASE
    ============================================================ */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* Prevent scroll chaining flicker on iOS / trackpads */
+  overscroll-behavior-y: none;
+}
 body {
   margin: 0;
   font-family: var(--font-sans);
@@ -65,8 +73,15 @@ body {
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "cv11";
   overflow-x: hidden;
+}
+
+/* Off-screen sections skip layout/paint until near viewport — huge scroll win */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
 }
 
 img { max-width: 100%; display: block; }
@@ -163,6 +178,13 @@ section {
   -webkit-backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid transparent;
   transition: border-color 300ms var(--ease), padding 300ms var(--ease);
+  /* Promote to its own layer — avoids repainting page content on scroll */
+  will-change: padding;
+  transform: translateZ(0);
+}
+/* Devices without backdrop-filter: solid fallback (avoids semi-transparent text repaint cost) */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav { background: rgba(255, 255, 255, 0.96); }
 }
 .nav.is-scrolled {
   padding: 0.85rem 0;
@@ -244,26 +266,30 @@ section {
   font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: -0.005em;
-  transition: transform 200ms var(--ease), background 200ms var(--ease), color 200ms var(--ease), border-color 200ms var(--ease), box-shadow 200ms var(--ease);
+  transition: transform 200ms var(--ease), background-color 200ms var(--ease), color 200ms var(--ease), border-color 200ms var(--ease), box-shadow 200ms var(--ease);
   white-space: nowrap;
+  transform: translateZ(0);
 }
-.btn:hover { transform: translateY(-2px); }
 .btn-primary {
   background: var(--color-text);
   color: var(--color-bg);
 }
-.btn-primary:hover { background: var(--color-accent-hover); color: var(--color-bg); box-shadow: var(--shadow-md); }
 .btn-secondary {
   background: transparent;
   color: var(--color-text);
   border: 1px solid var(--color-border-strong);
 }
-.btn-secondary:hover { border-color: var(--color-text); background: var(--color-surface); }
 .btn .arrow {
   display: inline-block;
   transition: transform 250ms var(--ease);
 }
-.btn:hover .arrow { transform: translateX(4px); }
+/* Hover effects only on devices that actually hover — avoids stuck states on touch */
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { transform: translate3d(0, -2px, 0); }
+  .btn-primary:hover { background: var(--color-accent-hover); color: var(--color-bg); box-shadow: var(--shadow-md); }
+  .btn-secondary:hover { border-color: var(--color-text); background: var(--color-surface); }
+  .btn:hover .arrow { transform: translate3d(4px, 0, 0); }
+}
 
 /* ============================================================
    HERO
@@ -302,17 +328,21 @@ section {
   content: ""; position: absolute; inset: -4px; border-radius: 50%;
   background: #16a34a; opacity: 0.35;
   animation: pulse 2.4s ease-in-out infinite;
+  /* Compositor-only animation — never repaints */
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 @keyframes pulse {
-  0%, 100% { transform: scale(0.85); opacity: 0; }
-  50%     { transform: scale(1.6); opacity: 0.4; }
+  0%, 100% { transform: scale(0.85) translateZ(0); opacity: 0; }
+  50%     { transform: scale(1.6) translateZ(0); opacity: 0.4; }
 }
 
 .hero h1 .reveal-line { display: block; overflow: hidden; }
 .hero h1 .reveal-line > span {
   display: block;
-  transform: translateY(105%);
+  transform: translate3d(0, 105%, 0);
   animation: rise 900ms var(--ease) forwards;
+  will-change: transform;
 }
 .hero h1 .reveal-line:nth-child(1) > span { animation-delay: 100ms; }
 .hero h1 .reveal-line:nth-child(2) > span { animation-delay: 220ms; }
@@ -323,10 +353,10 @@ section {
   font-variation-settings: "opsz" 144, "SOFT" 100;
 }
 
-@keyframes rise { to { transform: translateY(0); } }
+@keyframes rise { to { transform: translate3d(0, 0, 0); } }
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 .hero-bottom {
@@ -462,13 +492,15 @@ section {
   font-weight: 500;
   color: var(--color-text);
   background: var(--color-bg);
-  transition: transform 200ms var(--ease), border-color 200ms var(--ease), background 200ms var(--ease), color 200ms var(--ease);
+  transition: transform 200ms var(--ease), border-color 200ms var(--ease), background-color 200ms var(--ease), color 200ms var(--ease);
 }
-.tag:hover {
-  border-color: var(--color-text);
-  background: var(--color-text);
-  color: var(--color-bg);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .tag:hover {
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
+    transform: translate3d(0, -2px, 0);
+  }
 }
 
 /* ============================================================
@@ -493,11 +525,16 @@ section {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   transition: transform 350ms var(--ease), border-color 350ms var(--ease), box-shadow 350ms var(--ease);
+  /* Isolate paint to this card — hover repaints don't cascade to neighbors */
+  contain: layout paint;
+  transform: translateZ(0);
 }
-.project:hover {
-  transform: translateY(-4px);
-  border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-md);
+@media (hover: hover) and (pointer: fine) {
+  .project:hover {
+    transform: translate3d(0, -4px, 0);
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-md);
+  }
 }
 .project-visual {
   aspect-ratio: 16 / 11;
@@ -529,7 +566,9 @@ section {
   font-variation-settings: "opsz" 144, "SOFT" 100;
   transition: transform 600ms var(--ease);
 }
-.project:hover .project-visual-glyph { transform: scale(1.05); }
+@media (hover: hover) and (pointer: fine) {
+  .project:hover .project-visual-glyph { transform: scale(1.05) translateZ(0); }
+}
 .project-visual-tag {
   position: absolute;
   top: 1rem; left: 1rem;
@@ -557,13 +596,15 @@ section {
   border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  transition: background 200ms var(--ease), color 200ms var(--ease), border-color 200ms var(--ease), transform 250ms var(--ease);
+  transition: background-color 200ms var(--ease), color 200ms var(--ease), border-color 200ms var(--ease), transform 250ms var(--ease);
 }
-.project-link:hover {
-  background: var(--color-text);
-  color: var(--color-bg);
-  border-color: var(--color-text);
-  transform: rotate(-45deg);
+@media (hover: hover) and (pointer: fine) {
+  .project-link:hover {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+    transform: rotate(-45deg) translateZ(0);
+  }
 }
 .project-link svg { width: 14px; height: 14px; }
 .project-desc { color: var(--color-muted); font-size: 0.97rem; line-height: 1.6; }
@@ -597,20 +638,23 @@ section {
   padding: clamp(1.75rem, 3vw, 2.5rem);
   background: var(--color-bg);
   display: flex; flex-direction: column; gap: 1rem;
-  transition: background 300ms var(--ease);
+  transition: background-color 300ms var(--ease);
   position: relative;
+  contain: layout paint;
 }
-.service:hover { background: var(--color-surface-2); }
 .service-icon {
   width: 44px; height: 44px;
   border: 1px solid var(--color-border);
   border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
   background: var(--color-bg);
-  transition: background 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease);
+  transition: background-color 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease);
 }
-.service:hover .service-icon {
-  background: var(--color-text); color: var(--color-bg); border-color: var(--color-text);
+@media (hover: hover) and (pointer: fine) {
+  .service:hover { background: var(--color-surface-2); }
+  .service:hover .service-icon {
+    background: var(--color-text); color: var(--color-bg); border-color: var(--color-text);
+  }
 }
 .service-icon svg { width: 20px; height: 20px; }
 .service h3 { font-size: 1.3rem; }
@@ -674,18 +718,17 @@ section {
   border-bottom: 1px solid rgba(255,255,255,0.25);
   padding-bottom: 0.4rem;
   letter-spacing: -0.01em;
-  transition: border-color 250ms var(--ease), gap 250ms var(--ease);
-}
-.contact-email:hover {
-  color: var(--color-bg);
-  border-bottom-color: var(--color-bg);
-  gap: 1.5rem;
+  transition: border-color 250ms var(--ease);
 }
 .contact-email svg {
   width: 0.85em; height: 0.85em;
-  transition: transform 250ms var(--ease);
+  transition: transform 300ms var(--ease);
 }
-.contact-email:hover svg { transform: translate(4px, -4px); }
+@media (hover: hover) and (pointer: fine) {
+  .contact-email:hover { border-bottom-color: var(--color-bg); }
+  /* Animate the icon, not gap — gap triggers layout each frame */
+  .contact-email:hover svg { transform: translate3d(8px, -8px, 0); }
+}
 
 .contact-grid {
   margin-top: 5rem;
@@ -734,22 +777,25 @@ section {
 .footer a:hover { color: var(--color-bg); }
 
 /* ============================================================
-   SCROLL REVEAL
+   SCROLL REVEAL — GPU-only (transform + opacity)
+   will-change is added by JS just-in-time and removed after settle,
+   so the browser doesn't keep an idle compositor layer per element.
    ============================================================ */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 800ms var(--ease), transform 800ms var(--ease);
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 700ms var(--ease), transform 700ms var(--ease);
 }
+.reveal.is-priming { will-change: transform, opacity; }
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
-.reveal[data-delay="1"] { transition-delay: 80ms; }
-.reveal[data-delay="2"] { transition-delay: 160ms; }
-.reveal[data-delay="3"] { transition-delay: 240ms; }
-.reveal[data-delay="4"] { transition-delay: 320ms; }
-.reveal[data-delay="5"] { transition-delay: 400ms; }
+.reveal[data-delay="1"] { transition-delay: 70ms; }
+.reveal[data-delay="2"] { transition-delay: 140ms; }
+.reveal[data-delay="3"] { transition-delay: 210ms; }
+.reveal[data-delay="4"] { transition-delay: 280ms; }
+.reveal[data-delay="5"] { transition-delay: 350ms; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1003,7 +1049,7 @@ section {
        SKILLS SECTION
        Replace each [SKILL N] tag inside the .skill-tags lists.
        ============================================================ -->
-  <section class="skills" id="skills">
+  <section class="skills cv-auto" id="skills">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">02 — Capabilities</span>
@@ -1098,7 +1144,7 @@ section {
        PORTFOLIO SECTION
        Replace each .project block (title, desc, stack, link).
        ============================================================ -->
-  <section class="portfolio" id="work">
+  <section class="portfolio cv-auto" id="work">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">03 — Selected Work</span>
@@ -1203,7 +1249,7 @@ section {
        SERVICES SECTION
        Replace each [SERVICE DESCRIPTION] / pricing.
        ============================================================ -->
-  <section class="services" id="services">
+  <section class="services cv-auto" id="services">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">04 — Services</span>
@@ -1304,20 +1350,30 @@ section {
 
 <script>
 /* ============================================================
-   NAV — scroll state + mobile toggle
+   NAV — IntersectionObserver sentinel (no scroll listener at all)
+   We watch a 1px sentinel just below the top of <body>: when it
+   leaves the viewport upward, the page has been scrolled.
+   This is cheaper than a scroll handler and never thrashes layout.
    ============================================================ */
 (() => {
   const nav = document.getElementById('nav');
   const toggle = document.getElementById('nav-toggle');
   const links = document.getElementById('nav-links');
 
-  const onScroll = () => {
-    if (window.scrollY > 24) nav.classList.add('is-scrolled');
-    else nav.classList.remove('is-scrolled');
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  const sentinel = document.createElement('div');
+  sentinel.setAttribute('aria-hidden', 'true');
+  sentinel.style.cssText = 'position:absolute;top:24px;left:0;width:1px;height:1px;pointer-events:none;';
+  document.body.prepend(sentinel);
 
+  if ('IntersectionObserver' in window) {
+    const navIO = new IntersectionObserver(
+      ([entry]) => nav.classList.toggle('is-scrolled', !entry.isIntersecting),
+      { threshold: 0 }
+    );
+    navIO.observe(sentinel);
+  }
+
+  /* Mobile menu */
   toggle.addEventListener('click', () => {
     const open = links.classList.toggle('is-open');
     toggle.classList.toggle('is-open', open);
@@ -1336,26 +1392,54 @@ section {
 })();
 
 /* ============================================================
-   SCROLL REVEAL — IntersectionObserver
+   SMOOTH SCROLL — JS-driven for in-page anchors so we can land
+   slightly below the fixed nav. Falls back to native CSS smooth.
    ============================================================ */
 (() => {
-  if (!('IntersectionObserver' in window)) {
-    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
-    return;
-  }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  const NAV_OFFSET = 72;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+    const id = link.getAttribute('href');
+    if (!id || id === '#') return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
+    window.scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+    history.pushState(null, '', id);
+  });
 })();
 
 /* ============================================================
-   CURRENT YEAR (auto-updates footer)
+   SCROLL REVEAL — IntersectionObserver with will-change lifecycle
+   Adds will-change just before animating, removes after settle.
+   ============================================================ */
+(() => {
+  const els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const el = entry.target;
+      el.classList.add('is-priming');
+      // Next frame: trigger transition. Then drop will-change to free GPU memory.
+      requestAnimationFrame(() => {
+        el.classList.add('is-visible');
+        el.addEventListener('transitionend', () => el.classList.remove('is-priming'), { once: true });
+      });
+      io.unobserve(el);
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(el => io.observe(el));
+})();
+
+/* ============================================================
+   CURRENT YEAR
    ============================================================ */
 document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
 </script>
