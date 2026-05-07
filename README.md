@@ -1,22 +1,155 @@
-# Rafa Ghassan Rasyidi — Portfolio
+# Rafa Ghassan Rasyidi — Personal Website
 
-Personal portfolio for **Rafa Ghassan Rasyidi**, AI Trainer & RLHF Specialist.
+Personal portfolio + blog untuk **Rafa Ghassan Rasyidi**, AI Trainer & RLHF Specialist.
 
-A single-file static site, no build step, zero external dependencies (except Google Fonts).
+Static site, tanpa backend, tanpa build step. Tinggal upload, jalan.
 
-## Run locally
+---
 
-Open `index.html` directly in a browser, or serve it:
+## 📁 Struktur Folder
 
-```bash
-python3 -m http.server 8000
-# then visit http://localhost:8000
+```
+website-portofolio/
+├── index.html                    ← Halaman utama (homepage)
+├── assets/
+│   ├── styles.css                ← Semua CSS (warna, font, layout)
+│   └── main.js                   ← JavaScript (animasi, navigasi)
+├── blog/
+│   ├── index.html                ← Halaman daftar artikel blog
+│   └── posts/
+│       ├── _post-template.html   ← Template untuk artikel baru
+│       ├── auditing-chain-of-thought.html
+│       └── why-indonesian-ai-needs-native-trainers.html
+└── README.md
 ```
 
-## Deploy
+**Yang penting Anda tahu:**
+- Mau **ganti warna / font**? Edit `assets/styles.css` (bagian paling atas, `:root { ... }`).
+- Mau **edit konten homepage**? Edit `index.html`.
+- Mau **tambah artikel blog**? Lihat panduan di bawah.
 
-Drop the repo into any static host — Vercel, Netlify, GitHub Pages, Cloudflare Pages — no config needed.
+---
 
-## Customize
+## 🧪 Cara Buka di Komputer Sendiri
 
-All editable copy is marked with bracketed placeholder comments inside `index.html`, e.g. `[YOUR NAME]`, `[PROJECT TITLE]`, `[SERVICE DESCRIPTION]`. Design tokens (colors, fonts, spacing) live as CSS variables at the top of the `<style>` block.
+**Cara paling mudah:** klik dua kali file `index.html` — akan langsung terbuka di browser.
+
+**Atau pakai server lokal** (lebih akurat, simulasi seperti di internet):
+
+```bash
+cd website-portofolio
+python3 -m http.server 8000
+```
+
+Lalu buka `http://localhost:8000` di browser.
+
+---
+
+## 🚀 Cara Deploy ke Internet (Gratis)
+
+Ada 3 pilihan, pilih salah satu:
+
+### Pilihan 1 — Vercel (Paling Mudah, Recommended)
+
+1. Buka [vercel.com](https://vercel.com) → **Sign up** pakai GitHub atau email.
+2. Klik tombol **Add New → Project**.
+3. Drag-and-drop folder `website-portofolio` ke halaman itu.
+4. Tunggu ~30 detik. Selesai.
+5. Anda akan dapat URL seperti `https://website-portofolio-xxx.vercel.app` — sudah live!
+
+> **Bonus:** kalau Anda push folder ini ke GitHub, Vercel bisa otomatis re-deploy setiap kali Anda update file. Sangat cocok kalau Anda sering tambah artikel blog baru.
+
+### Pilihan 2 — Netlify
+
+1. Buka [netlify.com/drop](https://app.netlify.com/drop).
+2. Drag folder `website-portofolio` ke dalam kotak besar di halaman itu.
+3. Selesai. Dapat URL seperti `https://random-name-xxx.netlify.app`.
+
+### Pilihan 3 — GitHub Pages
+
+1. Buat repository GitHub baru, upload semua file ini.
+2. Repository → **Settings** → **Pages** → Source: pilih branch `main`, folder `/ (root)` → **Save**.
+3. Tunggu ~1 menit. URL akan jadi `https://<username>.github.io/<repo-name>/`.
+
+---
+
+## 🌐 Custom Domain (Opsional)
+
+Kalau ingin pakai domain sendiri (contoh: `rafaghassan.com`):
+
+1. **Beli domain** di Niagahoster, Namecheap, atau Cloudflare Registrar (~Rp 150–200rb/tahun).
+2. Di Vercel/Netlify: buka **Project Settings → Domains → Add Domain** → masukkan domain Anda.
+3. Ikuti instruksi DNS yang diberikan (copy-paste 2–3 record di dashboard registrar Anda).
+4. Tunggu ~5–60 menit. SSL/HTTPS otomatis aktif.
+
+---
+
+## ✍️ Cara Menambah Artikel Blog Baru
+
+Cuma 3 langkah:
+
+### 1. Buat file artikel baru
+
+Di folder `blog/posts/`, **copy** file `_post-template.html`, beri nama baru pakai kebab-case (huruf kecil, dipisah strip):
+
+```
+blog/posts/judul-artikel-baru-saya.html
+```
+
+### 2. Edit isinya
+
+Buka file tersebut, ganti bagian-bagian dalam `[KURUNG SIKU]`:
+
+| Placeholder | Diganti dengan |
+|---|---|
+| `[TITLE]` | Judul artikel (di `<title>` dan `<h1>`) |
+| `[DESCRIPTION]` | Ringkasan singkat untuk SEO (di meta description) |
+| `[DATE]` | Tanggal publish (contoh: "May 2026") |
+| `[READ TIME]` | Estimasi baca (contoh: "5 min read") |
+| `[CATEGORY]` | Kategori (contoh: "RLHF", "Indonesian AI") |
+| `[SUBTITLE / EXCERPT]` | 1–2 kalimat pengantar |
+| Konten dalam `<div class="prose">` | Tulisan artikel Anda |
+
+Tag HTML yang bisa dipakai di body artikel sudah dijelaskan di komentar template.
+
+### 3. Tambahkan link di halaman blog
+
+Buka `blog/index.html`, cari bagian `<!-- [POST 1] -->`, lalu **copy** salah satu `<article class="blog-card">` blok. Edit:
+- Tanggal, read time, kategori
+- Judul (di `<h2>`)
+- Excerpt (paragraf di bawah judul)
+- Link `href="posts/nama-file-anda.html"`
+
+Selesai. Save semua, deploy ulang (di Vercel/Netlify cukup re-upload folder).
+
+---
+
+## 🎨 Cara Ganti Warna / Font
+
+Buka `assets/styles.css`. Di bagian paling atas ada blok `:root { ... }` — di situ semua design tokens diatur.
+
+**Contoh ganti warna utama** (text dan tombol):
+```css
+:root {
+  --color-text: #1a1a1a;        /* ganti ke warna lain */
+  --color-heading: #0a0a0a;     /* ganti ke warna lain */
+}
+```
+
+**Contoh ganti font:**
+```css
+:root {
+  --font-display: "Playfair Display", serif;   /* heading */
+  --font-sans: "Open Sans", sans-serif;        /* body */
+}
+```
+> Jangan lupa juga update URL Google Fonts di setiap file HTML kalau ganti font.
+
+---
+
+## 🆘 Bantuan
+
+Kalau ada yang tidak jalan setelah edit, cara paling cepat:
+1. Buka file di browser → klik kanan → **Inspect** → tab **Console**.
+2. Lihat error yang muncul (biasanya nama file salah ketik atau path salah).
+3. Atau hubungi kembali — saya bisa bantu debug.

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="A native speaker's perspective on the structural failures of LLMs that treat Indonesian as an afterthought." />
+<meta name="theme-color" content="#0a0a0a" />
+<title>Why Indonesian AI deserves more than a translation layer — Rafa Ghassan Rasyidi</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+
+<link rel="stylesheet" href="../../assets/styles.css" />
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="../../index.html" class="brand" aria-label="Home">
+      Rafa Ghassan
+      <span class="brand-mark">/ AI</span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#skills">Skills</a></li>
+        <li><a href="../../index.html#work">Work</a></li>
+        <li><a href="../../index.html#services">Services</a></li>
+        <li><a href="../index.html" class="is-active">Blog</a></li>
+        <li><a href="../../index.html#contact" class="nav-cta">Get in touch</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <article>
+    <header class="article-header">
+      <div class="container-narrow">
+        <a href="../index.html" class="article-back">All posts</a>
+        <div class="article-meta">
+          <span>April 2026</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>7 min read</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>Indonesian AI</span>
+        </div>
+        <h1>Why Indonesian AI deserves more than a translation layer</h1>
+        <p class="lead">
+          Most "multilingual" LLMs treat Bahasa Indonesia as a translation target —
+          a downstream rendering of an English-shaped thought. That assumption is
+          where alignment quality quietly collapses for 270 million speakers.
+        </p>
+      </div>
+    </header>
+
+    <section class="article-body">
+      <div class="container-narrow">
+        <div class="prose">
+          <p>
+            When a global model says it "supports Indonesian," what that usually means is:
+            it can produce grammatically passable Indonesian sentences that decode an English
+            response into recognisable words. The thinking is happening in English. The
+            Indonesian is a costume.
+          </p>
+          <p>
+            For casual queries, this works well enough. For anything that requires <strong>cultural
+            register, social context, or domain-specific nuance</strong>, the costume comes off
+            quickly.
+          </p>
+
+          <h2>The register problem</h2>
+          <p>
+            Indonesian doesn't have one neutral mode of address. It has several, and the wrong
+            choice is jarring in a way that's hard to explain to someone who hasn't grown up with it.
+          </p>
+          <p>
+            A model that addresses an unknown adult user as <em>kamu</em> — the casual form —
+            isn't being friendly; it's being slightly impolite. A model that addresses a
+            fifteen-year-old user with stiff <em>Saudara/i</em> formality isn't being respectful;
+            it's being weird. Native speakers feel this immediately. Western evaluators, reading
+            through translation, often don't.
+          </p>
+
+          <h2>Idioms that translate but don't transfer</h2>
+          <p>
+            Try this: ask an LLM to explain the Indonesian phrase <em>"masuk angin"</em>. You'll
+            usually get a literal translation — "wind enters" — followed by a footnote that it
+            refers to a vague feeling of being unwell.
+          </p>
+          <p>
+            What you almost never get is an explanation of <strong>why</strong> the concept exists
+            as a category in Indonesian medical folklore, what symptoms it actually clusters,
+            or the ritualised treatments (<em>kerokan</em>) that go with it. The model has the
+            words. It doesn't have the cultural model that makes the words meaningful.
+          </p>
+
+          <blockquote>
+            A language is not a vocabulary. It's a worldview compressed into grammar.
+          </blockquote>
+
+          <h2>What good Indonesian alignment looks like</h2>
+          <p>
+            The correction work I do for Indonesian-language tasks isn't translation review.
+            It's <strong>cultural reconstruction</strong>. A few principles I keep coming back to:
+          </p>
+          <ul>
+            <li>
+              <strong>Match the user's register.</strong> If the user writes in <em>bahasa gaul</em>
+              (slang), respond in a register that's close — not pristine textbook Indonesian.
+            </li>
+            <li>
+              <strong>Honour honorifics.</strong> <em>Pak</em>, <em>Bu</em>, <em>Mbak</em>,
+              <em>Mas</em> are not interchangeable filler. They carry information about
+              relationship, age, and respect.
+            </li>
+            <li>
+              <strong>Don't translate religion as exotic.</strong> Indonesia is the world's
+              largest Muslim-majority country. References to prayer times, halal questions,
+              or Ramadan should be answered with the same default-reasonable tone an
+              English-language model uses for Christmas.
+            </li>
+            <li>
+              <strong>Recognise narrative conventions.</strong> Indonesian fiction, journalism,
+              and persuasive writing have their own rhythms. A model that produces "fluent
+              Indonesian" but in an English narrative shape reads as foreign.
+            </li>
+          </ul>
+
+          <h2>Why this matters past politeness</h2>
+          <p>
+            This isn't about feelings being hurt. It's about <strong>safety, accuracy, and
+            adoption</strong>. A medical-information chatbot that misreads a user's symptom
+            description because of register confusion gives worse advice. A mental-health
+            screening tool that misses cultural framings of distress fails the people who most
+            need it. A search assistant that returns Western-centric answers to Indonesian
+            queries is, in practice, useless.
+          </p>
+          <p>
+            Indonesian is the fourth most-spoken first language on the planet. It deserves AI
+            systems that were trained <strong>with</strong> it, not just <strong>at</strong> it —
+            and that requires native evaluators in the loop, not occasional consultants.
+          </p>
+
+          <hr />
+
+          <p>
+            That's the work I do. If your team is building for the Indonesian or Malaysian
+            market and the alignment isn't quite landing, I'd be happy to help.
+          </p>
+        </div>
+
+        <div class="container-narrow article-footer" style="padding-left: 0; padding-right: 0;">
+          <span class="eyebrow">Share</span>
+          <div class="article-share">
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://your-site.com/blog/posts/why-indonesian-ai-needs-native-trainers.html" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://twitter.com/intent/tweet?text=Why%20Indonesian%20AI%20deserves%20more%20than%20a%20translation%20layer&url=https://your-site.com/blog/posts/why-indonesian-ai-needs-native-trainers.html" target="_blank" rel="noopener">X / Twitter</a>
+            <a href="mailto:?subject=Why%20Indonesian%20AI%20deserves%20more&body=https://your-site.com/blog/posts/why-indonesian-ai-needs-native-trainers.html">Email</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© <span data-year>2026</span> Rafa Ghassan Rasyidi</span>
+    <span><a href="../index.html">← All posts</a></span>
+  </div>
+</footer>
+
+<script src="../../assets/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="A field guide to the recurring Chain-of-Thought failure modes I see in RLHF work — and how to correct them without flattening the model's voice." />
+<meta name="theme-color" content="#0a0a0a" />
+<title>Auditing Chain-of-Thought — Rafa Ghassan Rasyidi</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+
+<link rel="stylesheet" href="../../assets/styles.css" />
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="../../index.html" class="brand" aria-label="Home">
+      Rafa Ghassan
+      <span class="brand-mark">/ AI</span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#skills">Skills</a></li>
+        <li><a href="../../index.html#work">Work</a></li>
+        <li><a href="../../index.html#services">Services</a></li>
+        <li><a href="../index.html" class="is-active">Blog</a></li>
+        <li><a href="../../index.html#contact" class="nav-cta">Get in touch</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================================================
+       ARTICLE HEADER
+       Replace [TITLE] / [DATE] / [READ TIME] / [CATEGORY] below.
+       ============================================================ -->
+  <article>
+    <header class="article-header">
+      <div class="container-narrow">
+        <a href="../index.html" class="article-back">All posts</a>
+        <div class="article-meta">
+          <span>May 2026</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>9 min read</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>RLHF</span>
+        </div>
+        <h1>Auditing Chain-of-Thought: what frontier models actually get wrong</h1>
+        <p class="lead">
+          After thousands of RLHF tasks across LLMs and Vision-Language Models,
+          the same failure modes keep returning. Here's a field guide to the most
+          common reasoning errors I see — and how we correct them without flattening
+          the model's voice.
+        </p>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         ARTICLE BODY
+         Edit the prose inside the .prose container below.
+         Add headings (h2, h3), lists, blockquotes, links freely.
+         ============================================================ -->
+    <section class="article-body">
+      <div class="container-narrow">
+        <div class="prose">
+          <p>
+            When you spend long enough auditing model outputs, the failures stop looking like
+            random hallucinations. They start looking like <strong>habits</strong> — predictable
+            patterns of reasoning that the model falls back on when the question crosses some
+            invisible difficulty threshold.
+          </p>
+          <p>
+            This is a working catalogue of the failure modes I see most often in my RLHF work.
+            None of them are surprising in isolation; the surprising part is how consistently
+            they show up across different models, different domains, and different prompt styles.
+          </p>
+
+          <h2>1. Confident interpolation between unrelated facts</h2>
+          <p>
+            The model has fact A and fact B. It has never seen them combined. It produces a
+            confident-sounding sentence that bridges them — and that sentence is wrong.
+          </p>
+          <p>
+            This is the classic <em>plausible-but-false</em> hallucination, and it's still the
+            most common one I flag. Correcting it isn't about teaching the model new facts. It's
+            about teaching it to recognise the <strong>shape</strong> of a question that requires
+            interpolation it can't safely make, and to refuse gracefully.
+          </p>
+
+          <blockquote>
+            The hardest part of RLHF isn't catching the wrong answer — it's writing a corrected
+            answer that's calibrated to the model's actual epistemic position.
+          </blockquote>
+
+          <h2>2. Spatial reasoning that ignores occlusion</h2>
+          <p>
+            On the VLM side, this is the dominant failure I see. The model treats a partially
+            occluded object as fully visible, counts a row of identical items as one item, or
+            mistakes a reflection for a duplicate object.
+          </p>
+          <p>
+            What works: prompts with explicit <code>negative constraints</code> — instructing the
+            model to first identify what's blocked, ambiguous, or out-of-frame <em>before</em>
+            answering the spatial question. The Chain-of-Thought has to acknowledge what it
+            <strong>can't</strong> see before it can reliably describe what it can.
+          </p>
+
+          <h2>3. The empathy-shaped response that isn't empathetic</h2>
+          <p>
+            This one's where psychology training matters. A model trained on a large corpus of
+            "supportive" text learns the <em>surface forms</em> of empathy — soft adverbs,
+            validation phrases, suggestions framed as questions — without learning when those
+            forms are appropriate.
+          </p>
+          <p>
+            The result is a response that reads as warm but feels off. It validates a feeling
+            that wasn't actually expressed. It jumps to reassurance before the user has finished
+            describing their situation. It performs care instead of demonstrating it.
+          </p>
+          <p>
+            Correcting this requires evaluators who can articulate <strong>why</strong> a response
+            feels off, not just that it does. This is one of the few places where my background
+            in cognitive psychology gives me an edge over a pure ML evaluator.
+          </p>
+
+          <h2>4. Cultural defaults masquerading as universals</h2>
+          <p>
+            When a model is asked a question with cultural context — naming conventions, family
+            structures, religious holidays, polite forms of address — and the answer assumes a
+            Western, English-speaking default, that's a failure. It's also the failure that gets
+            caught least often, because most evaluators share that default.
+          </p>
+          <p>
+            For Indonesian language tasks specifically, this manifests as: incorrect register
+            (using <em>kamu</em> when <em>Anda</em> is expected, or vice versa), missing honorifics
+            in conversational contexts, and translating idioms into literal English meaning rather
+            than functional equivalents.
+          </p>
+
+          <h2>5. Chain-of-Thought that doesn't actually chain</h2>
+          <p>
+            This is the most subtle one. The model produces what looks like a step-by-step
+            reasoning chain, but each step is independent — it doesn't actually use the result
+            of the previous step to constrain the next. The final answer is correct or incorrect
+            for reasons that have nothing to do with the apparent reasoning trace.
+          </p>
+          <p>
+            This is hard to catch because the output looks reasonable. You only spot it when
+            you change one of the intermediate "facts" and watch the conclusion stay the same.
+            That's diagnostic.
+          </p>
+
+          <hr />
+
+          <h2>What I've learned</h2>
+          <p>
+            Good RLHF isn't about being maximally critical. It's about being <strong>specific</strong>.
+            A vague "this response is unsatisfactory" teaches the model nothing. A precise
+            "this response confuses occlusion with absence — the second object is partially behind
+            the first, not missing" teaches it where exactly to update.
+          </p>
+          <p>
+            And the best corrections preserve the model's voice. We're not trying to flatten it
+            into a corporate monotone. We're trying to make it more reliably itself — accurate,
+            calibrated, and aware of what it doesn't know.
+          </p>
+        </div>
+
+        <!-- ============================================================
+             ARTICLE FOOTER
+             ============================================================ -->
+        <div class="container-narrow article-footer" style="padding-left: 0; padding-right: 0;">
+          <span class="eyebrow">Share</span>
+          <div class="article-share">
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://your-site.com/blog/posts/auditing-chain-of-thought.html" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://twitter.com/intent/tweet?text=Auditing%20Chain-of-Thought%3A%20what%20frontier%20models%20actually%20get%20wrong&url=https://your-site.com/blog/posts/auditing-chain-of-thought.html" target="_blank" rel="noopener">X / Twitter</a>
+            <a href="mailto:?subject=Auditing%20Chain-of-Thought&body=https://your-site.com/blog/posts/auditing-chain-of-thought.html">Email</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© <span data-year>2026</span> Rafa Ghassan Rasyidi</span>
+    <span><a href="../index.html">← All posts</a></span>
+  </div>
+</footer>
+
+<script src="../../assets/main.js" defer></script>
+</body>
+</html>

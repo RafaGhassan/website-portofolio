@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Field notes on RLHF, prompt engineering, Indonesian language AI, and the psychology of human-AI alignment — by Rafa Ghassan Rasyidi." />
+<meta name="theme-color" content="#0a0a0a" />
+<title>Blog — Rafa Ghassan Rasyidi</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="../index.html" class="brand" aria-label="Home">
+      Rafa Ghassan
+      <span class="brand-mark">/ AI</span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#skills">Skills</a></li>
+        <li><a href="../index.html#work">Work</a></li>
+        <li><a href="../index.html#services">Services</a></li>
+        <li><a href="index.html" class="is-active">Blog</a></li>
+        <li><a href="../index.html#contact" class="nav-cta">Get in touch</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================================================
+       PAGE HEADER
+       ============================================================ -->
+  <section class="page-header">
+    <div class="container">
+      <span class="eyebrow reveal">Blog &amp; Field Notes</span>
+      <h1 class="reveal" data-delay="1" style="margin-top: 1.25rem;">Notes from the alignment frontier.</h1>
+      <p class="lead reveal" data-delay="2">
+        Essays, case studies, and short-form thinking on RLHF, prompt engineering,
+        Indonesian-language AI, and the psychology of trust between humans and machines.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       BLOG LIST
+       To add a new post: copy one of the <article class="blog-card"> blocks
+       below, edit the metadata + link, and create a matching HTML file in
+       /blog/posts/ using post-template.html as a starting point.
+       ============================================================ -->
+  <section>
+    <div class="container">
+      <div class="blog-list">
+
+        <!-- [POST 1] -->
+        <article class="blog-card reveal">
+          <div class="blog-card-meta">
+            <span>May 2026</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span>9 min read</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span>RLHF</span>
+          </div>
+          <div>
+            <a href="posts/auditing-chain-of-thought.html" class="blog-card-link">
+              <h2>Auditing Chain-of-Thought: what frontier models actually get wrong</h2>
+              <p style="margin-top: 1rem;">
+                After thousands of RLHF tasks across LLMs and VLMs, the same failure modes keep
+                returning. A field guide to the most common reasoning errors I see — and how
+                we correct them without flattening the model's voice.
+              </p>
+              <span class="blog-card-cta">Read the essay</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- [POST 2] -->
+        <article class="blog-card reveal" data-delay="1">
+          <div class="blog-card-meta">
+            <span>April 2026</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span>7 min read</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span>Indonesian AI</span>
+          </div>
+          <div>
+            <a href="posts/why-indonesian-ai-needs-native-trainers.html" class="blog-card-link">
+              <h2>Why Indonesian AI deserves more than a translation layer</h2>
+              <p style="margin-top: 1rem;">
+                A native speaker's perspective on the structural failures of LLMs that treat
+                Indonesian as an afterthought — and what high-quality alignment looks like when
+                cultural fidelity is treated as a first-class requirement.
+              </p>
+              <span class="blog-card-cta">Read the essay</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- [POST 3 — Coming soon placeholder] -->
+        <article class="blog-card reveal" data-delay="2" style="opacity: 0.55;">
+          <div class="blog-card-meta">
+            <span>Coming soon</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span>Psychology &amp; AI</span>
+          </div>
+          <div>
+            <h2 style="cursor: default;">The psychologist's quiet advantage in AI evaluation</h2>
+            <p style="margin-top: 1rem;">
+              Why a background in cognitive psychology changes how you spot hallucinations, evaluate
+              empathy in conversational agents, and build emotionally-safe screening tools.
+            </p>
+            <span class="blog-card-cta" style="cursor: default;">In progress</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© <span data-year>2026</span> Rafa Ghassan Rasyidi</span>
+    <span><a href="../index.html">← Back to home</a></span>
+  </div>
+</footer>
+
+<script src="../assets/main.js" defer></script>
+</body>
+</html>

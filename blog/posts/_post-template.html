@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  POST TEMPLATE — How to add a new blog post
+  ============================================================
+  1. Copy this file in /blog/posts/ with a new name, e.g.
+     "my-new-article.html" (use kebab-case, no spaces).
+  2. Replace [TITLE], [DESCRIPTION], [DATE], [READ TIME], [CATEGORY],
+     and the article body inside the .prose container.
+  3. Open /blog/index.html and add a new <article class="blog-card">
+     entry that links to your new file (copy an existing card and edit).
+  4. Done — save, commit, and re-deploy.
+  ============================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="[DESCRIPTION — short summary of the article]" />
+<meta name="theme-color" content="#0a0a0a" />
+<title>[TITLE] — Rafa Ghassan Rasyidi</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+
+<link rel="stylesheet" href="../../assets/styles.css" />
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="../../index.html" class="brand" aria-label="Home">
+      Rafa Ghassan
+      <span class="brand-mark">/ AI</span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="../../index.html#about">About</a></li>
+        <li><a href="../../index.html#skills">Skills</a></li>
+        <li><a href="../../index.html#work">Work</a></li>
+        <li><a href="../../index.html#services">Services</a></li>
+        <li><a href="../index.html" class="is-active">Blog</a></li>
+        <li><a href="../../index.html#contact" class="nav-cta">Get in touch</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+  <article>
+    <header class="article-header">
+      <div class="container-narrow">
+        <a href="../index.html" class="article-back">All posts</a>
+        <div class="article-meta">
+          <span>[DATE — e.g. May 2026]</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>[READ TIME — e.g. 7 min read]</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span>[CATEGORY — e.g. RLHF]</span>
+        </div>
+        <h1>[TITLE]</h1>
+        <p class="lead">
+          [SUBTITLE / EXCERPT — 1-2 sentences that summarise the article]
+        </p>
+      </div>
+    </header>
+
+    <section class="article-body">
+      <div class="container-narrow">
+        <div class="prose">
+
+          <!-- WRITE YOUR ARTICLE HERE.
+               Use:
+                 <p>...</p>                  for paragraphs
+                 <h2>...</h2>                for major sections
+                 <h3>...</h3>                for sub-sections
+                 <strong>...</strong>        for bold
+                 <em>...</em>                for italic
+                 <a href="...">...</a>       for links
+                 <ul><li>...</li></ul>       for bullet lists
+                 <ol><li>...</li></ol>       for numbered lists
+                 <blockquote>...</blockquote> for pull quotes
+                 <code>...</code>            for inline code
+                 <hr />                      for horizontal divider
+          -->
+
+          <p>
+            [Opening paragraph...]
+          </p>
+
+          <h2>[Section heading]</h2>
+          <p>
+            [Section content...]
+          </p>
+
+          <blockquote>
+            [Optional pull quote]
+          </blockquote>
+
+          <h2>[Another section]</h2>
+          <p>
+            [More content...]
+          </p>
+
+        </div>
+
+        <div class="container-narrow article-footer" style="padding-left: 0; padding-right: 0;">
+          <span class="eyebrow">Share</span>
+          <div class="article-share">
+            <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="#" target="_blank" rel="noopener">X / Twitter</a>
+            <a href="#">Email</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© <span data-year>2026</span> Rafa Ghassan Rasyidi</span>
+    <span><a href="../index.html">← All posts</a></span>
+  </div>
+</footer>
+
+<script src="../../assets/main.js" defer></script>
+</body>
+</html>
