@@ -689,6 +689,69 @@ section {
 .contact-block a:hover { border-bottom-color: rgba(255,255,255,0.6); color: var(--color-bg); }
 
 /* ============================================================
+   PROFILE PHOTO — graceful fallback if image is missing
+   Drop your photo at assets/profile.jpg (square, 800x800+).
+   The "RG" monogram shows underneath until the file exists.
+   ============================================================ */
+.profile-photo {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: 2rem;
+  contain: layout paint;
+  transform: translateZ(0);
+}
+.profile-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  transition: transform 700ms var(--ease);
+}
+.profile-photo .profile-fallback {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 5rem);
+  font-weight: 800;
+  color: var(--color-border-strong);
+  letter-spacing: -0.04em;
+  z-index: 1;
+  user-select: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .profile-photo:hover img { transform: scale(1.04) translateZ(0); }
+}
+
+/* ============================================================
+   BUTTONS — outline / tertiary variant for download links
+   ============================================================ */
+.btn-tertiary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 0.85rem 1.4rem;
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-tertiary:hover {
+    border-color: var(--color-text);
+    background: var(--color-surface);
+  }
+}
+
+/* ============================================================
    FOOTER
    ============================================================ */
 .footer {

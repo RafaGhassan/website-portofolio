@@ -13,7 +13,12 @@ website-portofolio/
 ├── index.html                    ← Halaman utama (homepage)
 ├── assets/
 │   ├── styles.css                ← Semua CSS (warna, font, layout)
-│   └── main.js                   ← JavaScript (animasi, navigasi)
+│   ├── main.js                   ← JavaScript (animasi, navigasi)
+│   ├── favicon.svg               ← Icon di tab browser
+│   ├── og-image.svg              ← Gambar share di sosmed (source)
+│   ├── og-preview.html           ← Preview untuk konversi ke PNG
+│   ├── profile.jpg               ← ⚠️ Anda perlu upload sendiri
+│   └── Rafa_Ghassan_Rasyidi_CV.pdf  ← ⚠️ Anda perlu upload sendiri
 ├── blog/
 │   ├── index.html                ← Halaman daftar artikel blog
 │   └── posts/
@@ -144,6 +149,49 @@ Buka `assets/styles.css`. Di bagian paling atas ada blok `:root { ... }` — di 
 }
 ```
 > Jangan lupa juga update URL Google Fonts di setiap file HTML kalau ganti font.
+
+---
+
+---
+
+## 📸 File yang Perlu Anda Siapkan
+
+Ada 2 file yang website ini referensikan tapi belum ada — Anda tinggal upload ke folder `assets/`:
+
+### 1. Foto Profil — `assets/profile.jpg`
+
+- **Ukuran ideal:** kotak (1:1), minimum 800×800 pixel
+- **Format:** JPG (preferred) atau PNG
+- **Tips:** crop ketat sampai bahu, background polos, pencahayaan natural
+- Selama file belum ada, monogram **"RG"** akan tampil otomatis sebagai placeholder — website tetap terlihat rapi
+
+### 2. CV PDF — `assets/Rafa_Ghassan_Rasyidi_CV.pdf`
+
+- Export CV Anda ke PDF (dari Word: File → Export → PDF, atau dari Google Docs: File → Download → PDF)
+- Beri nama exactly **`Rafa_Ghassan_Rasyidi_CV.pdf`** dan letakkan di folder `assets/`
+- Tombol "Download CV" di Hero section akan langsung berfungsi
+
+---
+
+## 🖼️ Cara Generate OG Image (gambar share di LinkedIn / WhatsApp)
+
+Versi SVG sudah saya siapkan di `assets/og-image.svg`. Untuk kompatibilitas penuh dengan LinkedIn dan WhatsApp, perlu di-convert ke PNG:
+
+**Cara paling mudah:**
+
+1. Buka file `assets/og-preview.html` di browser (klik dua kali).
+2. Anda akan lihat preview gambar 1200×630.
+3. Buka [cloudconvert.com/svg-to-png](https://cloudconvert.com/svg-to-png).
+4. Upload `assets/og-image.svg`, set width 1200, download hasil PNG.
+5. Save sebagai `assets/og-image.png` (nama persis).
+
+**Atau pakai screenshot:**
+- Buka `og-preview.html` di browser
+- Screenshot kotak putih persis 1200×630 (pakai Snipping Tool / macOS Cmd+Shift+5)
+- Save sebagai `assets/og-image.png`
+
+**Setelah deploy:**
+Setelah website Anda online (misal di Vercel), buka semua file `.html` dan ganti `https://your-site.com` di meta tags dengan URL asli Anda (contoh `https://rafaghassan.vercel.app` atau `https://rafaghassan.com`). Search & replace cukup di 5 file.
 
 ---
 
